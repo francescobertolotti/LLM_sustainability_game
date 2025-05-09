@@ -63,13 +63,6 @@ class agent:
         
     def initialize_strategy(self, strategies, strategies_names):
 
-        # prompt = f"""You are an agent in the game and you have to decide your strategy. These are the rules.
-        # ["{par.rules}"]
-        # Decide your purpose and your strategy in the game, and return it in max 5 rows."""
-        # messages = [{"role": "user", "content": prompt}]
-        # completion = client.chat.completions.create(model="gpt-4o-mini",messages=messages,temperature=1.5, max_tokens=400)
-        # self.strategy = completion.choices[0].message.content
-
         self.strategy = random.choice(strategies)
         self.strategy_name = strategies_names[strategies.index(self.strategy)]
 
@@ -106,11 +99,11 @@ class agent:
 
             messages = [{"role": "system", "content": system_prompt},{"role": "user", "content": content}]
             if par.explanation_production:
-                completion = client.beta.chat.completions.parse(model="gpt-4o-mini",messages=messages,temperature=0.7, response_format=LLM_output_production)
+                completion = client.beta.chat.completions.parse(model="gpt-4o-mini",messages=messages,temperature=0, response_format=LLM_output_production)
                 answer = completion.choices[0].message.parsed.value
                 print(completion.choices[0].message.parsed.explanation)
             else:
-                completion = client.chat.completions.create(model="gpt-4o-mini",messages=messages,temperature=0.7)
+                completion = client.chat.completions.create(model="gpt-4o-mini",messages=messages,temperature=0)
                 answer = completion.choices[0].message.content
             # print(self.who, answer)
             self.last_decisions = eval(completion.choices[0].message.content)
@@ -189,7 +182,7 @@ class agent:
 
             messages = [{"role": "system", "content": system_prompt},{"role": "user", "content": content}]
         
-            completion = client.chat.completions.create(model="gpt-4o-mini",messages=messages,temperature=0.7)
+            completion = client.chat.completions.create(model="gpt-4o-mini",messages=messages,temperature=0)
             answer = completion.choices[0].message.content
             # print(self.who, answer)
             return eval(completion.choices[0].message.content)
